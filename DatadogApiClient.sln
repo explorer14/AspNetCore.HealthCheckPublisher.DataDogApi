@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatadogApi.Client", "src\DatadogApi.Client\DatadogApi.Client.csproj", "{83CDE86F-A540-437C-B68D-56843091F97B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D4F6EA58-7BF5-4563-AD9E-410A141AF6C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B6CC9D5B-8B8E-4592-8B81-D1FD220EB655}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDogApi.Client.Tests", "tests\DataDogApi.Client.Tests\DataDogApi.Client.Tests.csproj", "{63297312-5522-41E0-BC5B-44641612E05B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83CDE86F-A540-437C-B68D-56843091F97B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83CDE86F-A540-437C-B68D-56843091F97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83CDE86F-A540-437C-B68D-56843091F97B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83CDE86F-A540-437C-B68D-56843091F97B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63297312-5522-41E0-BC5B-44641612E05B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63297312-5522-41E0-BC5B-44641612E05B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63297312-5522-41E0-BC5B-44641612E05B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63297312-5522-41E0-BC5B-44641612E05B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{83CDE86F-A540-437C-B68D-56843091F97B} = {D4F6EA58-7BF5-4563-AD9E-410A141AF6C3}
+		{63297312-5522-41E0-BC5B-44641612E05B} = {B6CC9D5B-8B8E-4592-8B81-D1FD220EB655}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD2BAF9E-39F0-41A0-BEEB-382628925EFA}
+	EndGlobalSection
+EndGlobal
