@@ -1,4 +1,5 @@
 ﻿using DatadogApi.Client.Metrics;
+using DatadogApi.Client.Settings;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 using Serilog;
@@ -21,21 +22,22 @@ namespace DatadogApi.Client
 
         public async Task SendHealthReport(
             HealthReport healthReport,
-            string applicationPrefix,
-            Dictionary<string, string> metricTags)
+            HealthReportOptions healthReportOptions)
         {
-            var metricTagsString = string.Join(',', metricTags.Select(x => $"{x.Key}:{x.Value}"));
+            var metricTagsString = string.Join(',',
+                healthReportOptions.DefaultMetricTags.Select(x => $"{x.Key}:{x.Value}"));
+
             var posixTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
             await SendMetricForOverallAppHealth(
                 healthReport,
-                applicationPrefix,
+                healthReportOptions.ApplicationPrefix,
                 metricTagsString, posixTimeStamp);
 
             foreach (var item in healthReport.Entries)
             {
                 await SendMetricForComponentHealth(
-                    applicationPrefix,
+                    healthReportOptions.ApplicationPrefix,
                     metricTagsString, posixTimeStamp, item);
             }
         }

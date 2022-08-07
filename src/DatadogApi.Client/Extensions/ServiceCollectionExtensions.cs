@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DatadogApi.Client.Settings;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace DatadogApi.Client
+namespace DatadogApi.Client.Extensions
 {
     public static class ServiceCollectionExtensions
     {

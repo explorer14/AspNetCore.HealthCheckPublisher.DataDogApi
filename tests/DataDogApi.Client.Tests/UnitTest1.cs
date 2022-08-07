@@ -1,4 +1,6 @@
 using DatadogApi.Client;
+using DatadogApi.Client.Extensions;
+using DatadogApi.Client.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DataDogApi.Client.Tests
@@ -6,7 +8,7 @@ namespace DataDogApi.Client.Tests
     public class UnitTest1
     {
         [Fact]
-        public async Task Test1()
+        public void Test1()
         {
             var svcs = new ServiceCollection();
 
