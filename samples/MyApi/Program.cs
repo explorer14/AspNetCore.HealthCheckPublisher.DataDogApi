@@ -1,12 +1,18 @@
-using DatadogApi.Client;
 using DatadogApi.Client.Extensions;
 using DatadogApi.Client.Settings;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo
+    .Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}]{Properties:j}{Message:lj}{NewLine}{Exception}")
+    .Enrich
+    .FromLogContext()
+    .FilterOutEventsWithSensitiveInfo()
+    .CreateLogger();
 
 // Add services to the container.
 
