@@ -56,7 +56,7 @@ namespace DataDogApi.Client.Tests
         public async Task ShouldSendCompliantRequestBody()
         {
             var metric = JsonConvert.DeserializeObject<CountMetric>(
-                "{\r\n    \"series\": [\r\n        {\r\n            \"metric\": \"TESTAPP.app.ishealthy\",\r\n            \"type\": 1,\r\n            \"points\": [\r\n                {\r\n                    \"timestamp\": 0,\r\n                    \"value\": 2\r\n                }\r\n            ],\r\n            \"tags\": [\r\n                \"Environment:testing\"\r\n            ],\r\n            \"resources\": [\r\n                {\r\n                    \"name\": \"LAPTOP-BA2736SB\",\r\n                    \"type\": \"host\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}");
+                "{\r\n    \"series\": [\r\n        {\r\n            \"metric\": \"TESTAPP.app.ishealthy\",\r\n            \"type\": 1,\r\n            \"points\": [\r\n                {\r\n                    \"timestamp\": 0,\r\n                    \"value\": 2\r\n                }\r\n            ],\r\n            \"tags\": [\r\n                \"Environment:testing\"\r\n            ],\r\n            \"resources\": [\r\n                {\r\n                    \"name\": \"machine1\",\r\n                    \"type\": \"host\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}");
 
             var apiRequestSpy = new DatadogApiRequestSpy();
             var ddReporter = new DatadogHealthReporter(
@@ -136,6 +136,7 @@ namespace DataDogApi.Client.Tests
                 request.Content?.ReadAsStringAsync(cancellationToken)
                     .GetAwaiter().GetResult() ?? string.Empty)!;
             RequestBodyAsMetric.series.First().points.First().timestamp = 0;
+            RequestBodyAsMetric.series.First().resources.First().name = "machine1";
             HostAddress = $"{request.RequestUri.Scheme}://{request.RequestUri.Host}";
 
             return Task.FromResult(
