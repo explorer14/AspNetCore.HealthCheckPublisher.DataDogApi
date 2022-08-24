@@ -24,21 +24,23 @@ namespace DatadogApi.Client
             HealthReport healthReport,
             HealthReportOptions healthReportOptions)
         {
-            var metricTagsString = string.Join(',',
-                healthReportOptions.DefaultMetricTags.Select(x => $"{x.Key}:{x.Value}"));
+            var metricTags =
+                healthReportOptions.DefaultMetricTags
+                    .Select(x => $"{x.Key}:{x.Value}")
+                    .ToList();
 
             var posixTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
             await SendMetricForOverallAppHealth(
                 healthReport,
                 healthReportOptions.ApplicationPrefix,
-                metricTagsString, posixTimeStamp);
+                metricTags, posixTimeStamp);
 
             foreach (var item in healthReport.Entries)
             {
                 await SendMetricForComponentHealth(
                     healthReportOptions.ApplicationPrefix,
-                    metricTagsString, posixTimeStamp, item);
+                    metricTags, posixTimeStamp, item);
             }
         }
 
@@ -50,9 +52,15 @@ namespace DatadogApi.Client
                     Encoding.UTF8, "application/json");
             Log.Logger.Information($"JSON was {json}");
 
-            var ddResponse = await httpClient.PostAsync(
-                $"/api/v1/series?api_key={ddApiKey}&application_key={ddAppKey}",
-                jsonContent);
+            var request = new HttpRequestMessage(HttpMethod.Post, "api/v2/series")
+            {
+                Content = jsonContent,
+            };
+
+            request.Headers.TryAddWithoutValidation("DD-API-KEY", ddApiKey);
+            request.Headers.TryAddWithoutValidation("DD-APPLICATION-KEY", ddAppKey);
+
+            var ddResponse = await httpClient.SendAsync(request);
             ddResponse.EnsureSuccessStatusCode();
             var ddResponseContent = await ddResponse.Content.ReadAsStringAsync();
             Log.Logger.Information($"DD returned {ddResponseContent}");
@@ -78,7 +86,7 @@ namespace DatadogApi.Client
 
         private async Task SendMetricForComponentHealth(
             string metricAppPrefix,
-            string metricTags,
+            List<string> metricTags,
             long posixTimeStamp,
             KeyValuePair<string, HealthReportEntry> item)
         {
@@ -92,7 +100,7 @@ namespace DatadogApi.Client
                     $"{item.Key.ToLower().Replace(" ", "_")}.ishealthy",
                 posixTimeStamp: posixTimeStamp,
                 count: (int)item.Value.Status,
-                tags: metricTags);
+                tags: metricTags.ToList());
 
             GuageMetric guageMetric = new GuageMetric(
                 metricName: $"{metricAppPrefix}.app." +
@@ -108,7 +116,7 @@ namespace DatadogApi.Client
         private async Task SendMetricForOverallAppHealth(
             HealthReport healthReport,
             string metricAppPrefix,
-            string metricTags,
+            List<string> metricTags,
             long posixTimeStamp)
         {
             Log.Logger.Information(
@@ -119,7 +127,7 @@ namespace DatadogApi.Client
                     metricName: $"{metricAppPrefix}.app.ishealthy",
                     posixTimeStamp: posixTimeStamp,
                     count: (int)healthReport.Status,
-                    tags: metricTags);
+                    tags: metricTags.ToList());
 
             await SendMetric(countMetric1);
         }

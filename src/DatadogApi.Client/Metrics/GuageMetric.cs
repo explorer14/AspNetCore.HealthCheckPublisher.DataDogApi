@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DatadogApi.Client.Metrics
+﻿namespace DatadogApi.Client.Metrics
 {
     public class GuageMetric
     {
         public GuageMetric(
             string metricName,
             long posixTimeStamp,
-            int value, string tags)
+            int value, List<string> tags)
         {
             series.Add(
                 new Series(
                     posixTimeStamp: posixTimeStamp,
-                    count: value)
+                    count: value,
+                    hostName: Environment.MachineName)
                 {
                     tags = tags,
-                    host = Environment.MachineName,
                     metric = metricName,
-                    type = "guage"
+                    type = 3
                 });
         }
 

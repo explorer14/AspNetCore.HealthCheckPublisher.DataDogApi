@@ -5,10 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DataDogApi.Client.Tests
 {
-    public class UnitTest1
+    public class WhenBootstrappingHealthReporter
     {
         [Fact]
-        public void Test1()
+        public void ShouldResolveANonNullInstanceFromDI()
         {
             var svcs = new ServiceCollection();
 

@@ -1,6 +1,7 @@
 ﻿namespace DatadogApi.Client.Metrics
 {
-    public class Point
+    [Obsolete]
+    public class PointX
     {
         public int Count { get; set; }
         public long PosixTimestamp { get; set; }
