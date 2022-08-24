@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DatadogApi.Client.Metrics
+﻿namespace DatadogApi.Client.Metrics
 {
     public class CountMetric
     {
         public CountMetric(
             string metricName,
             long posixTimeStamp,
-            int count, string tags)
+            int count, List<string> tags)
         {
             series.Add(
                 new Series(
                     posixTimeStamp: posixTimeStamp,
-                    count: count)
+                    count: count,
+                    hostName: Environment.MachineName)
                 {
                     tags = tags,
-                    host = Environment.MachineName,
                     metric = metricName,
-                    type = "count"
+                    type = 1
                 });
         }
 

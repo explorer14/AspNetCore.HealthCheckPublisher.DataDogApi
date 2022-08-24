@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageVersion>1.0.0-preview2</PackageVersion>
+    <PackageVersion>1.0.0-preview3</PackageVersion>
 	<PackageProjectUrl>https://github.com/explorer14/DatadogApiClient/blob/master/README.md</PackageProjectUrl>
   </PropertyGroup>
 

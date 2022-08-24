@@ -1,20 +1,34 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace DatadogApi.Client.Metrics
+﻿namespace DatadogApi.Client.Metrics
 {
+    public class Point
+    {
+        public long timestamp { get; set; }
+
+        public double value { get; set; }
+    }
+
+    public class Resource
+    {
+        public string name { get; set; }
+        public string type { get; set; }
+    }
+
     public class Series
     {
-        public Series(long posixTimeStamp, int count)
+        public Series(long posixTimeStamp, int count, string hostName)
         {
-            points.Add(new[] { posixTimeStamp, count }.ToList());
+            points.Add(new Point { timestamp = posixTimeStamp, value = count });
+            resources.Add(new Resource { type = "host", name = hostName });
         }
 
-        public string host { get; set; }
         public string metric { get; set; }
-        public List<List<long>> points { get; set; } = new List<List<long>>();
 
-        public string tags { get; set; }
-        public string type { get; set; }
+        public List<Point> points { get; set; } = new List<Point>();
+
+        public List<Resource> resources { get; set; } = new List<Resource>();
+
+        public List<string> tags { get; set; } = new List<string>();
+
+        public int type { get; set; }
     }
 }

@@ -11,6 +11,8 @@ namespace DatadogApi.Client.Extensions
             services.AddSingleton(datadogApiSettings)
                 .AddHttpClient<IApplicationHealthReporter, DatadogHealthReporter>()
                 .ConfigureHttpClient(client =>
-                    client.BaseAddress = new Uri("https://app.datadoghq.com"));
+                {
+                    client.BaseAddress = new Uri("https://app.datadoghq.com");
+                });
     }
 }
