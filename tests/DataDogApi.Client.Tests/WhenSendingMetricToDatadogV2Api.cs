@@ -35,9 +35,8 @@ namespace DataDogApi.Client.Tests
                         {
                             new("TEST",new HealthReportEntry())
                         }), HealthStatus.Healthy, TimeSpan.Zero),
-                new HealthReportOptions
+                new HealthReportOptions(applicationPrefix: "TESTAPP")
                 {
-                    ApplicationPrefix = "TESTAPP",
                     DefaultMetricTags = new Dictionary<string, string>(
                         new KeyValuePair<string, string>[]
                         {
@@ -73,9 +72,8 @@ namespace DataDogApi.Client.Tests
                     new Dictionary<string, HealthReportEntry>(),
                     HealthStatus.Healthy,
                     TimeSpan.Zero),
-                new HealthReportOptions
+                new HealthReportOptions(applicationPrefix: "TESTAPP")
                 {
-                    ApplicationPrefix = "TESTAPP",
                     DefaultMetricTags = new Dictionary<string, string>(
                         new KeyValuePair<string, string>[]
                         {
@@ -105,9 +103,8 @@ namespace DataDogApi.Client.Tests
                         {
                             new("TEST",new HealthReportEntry())
                         }), HealthStatus.Healthy, TimeSpan.Zero),
-                new HealthReportOptions
+                new HealthReportOptions(applicationPrefix: "TESTAPP")
                 {
-                    ApplicationPrefix = "TESTAPP",
                     DefaultMetricTags = new Dictionary<string, string>(
                         new KeyValuePair<string, string>[]
                         {
