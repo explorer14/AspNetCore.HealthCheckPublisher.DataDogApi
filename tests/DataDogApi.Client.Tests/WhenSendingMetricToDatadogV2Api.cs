@@ -1,4 +1,5 @@
 ﻿using DatadogApi.Client;
+using DatadogApi.Client.Builders;
 using DatadogApi.Client.Extensions;
 using DatadogApi.Client.Metrics;
 using DatadogApi.Client.Settings;
@@ -35,14 +36,7 @@ namespace DataDogApi.Client.Tests
                         {
                             new("TEST",new HealthReportEntry())
                         }), HealthStatus.Healthy, TimeSpan.Zero),
-                new HealthReportOptions(applicationPrefix: "TESTAPP")
-                {
-                    DefaultMetricTags = new Dictionary<string, string>(
-                        new KeyValuePair<string, string>[]
-                        {
-                            new("Environment", "testing")
-                        })
-                });
+                DefaultHealthReportOptions.Instance);
 
             apiRequestSpy.Headers.Should()
                 .Satisfy(apiKeyHeader => apiKeyHeader.Key == "DD-API-KEY" &&
@@ -72,14 +66,7 @@ namespace DataDogApi.Client.Tests
                     new Dictionary<string, HealthReportEntry>(),
                     HealthStatus.Healthy,
                     TimeSpan.Zero),
-                new HealthReportOptions(applicationPrefix: "TESTAPP")
-                {
-                    DefaultMetricTags = new Dictionary<string, string>(
-                        new KeyValuePair<string, string>[]
-                        {
-                            new("Environment", "testing")
-                        })
-                });
+                DefaultHealthReportOptions.Instance);
 
             apiRequestSpy.RequestBodyAsMetric.Should().BeEquivalentTo(metric);
         }
@@ -103,14 +90,7 @@ namespace DataDogApi.Client.Tests
                         {
                             new("TEST",new HealthReportEntry())
                         }), HealthStatus.Healthy, TimeSpan.Zero),
-                new HealthReportOptions(applicationPrefix: "TESTAPP")
-                {
-                    DefaultMetricTags = new Dictionary<string, string>(
-                        new KeyValuePair<string, string>[]
-                        {
-                            new("Environment", "testing")
-                        })
-                });
+                DefaultHealthReportOptions.Instance);
 
                 apiRequestSpy.HostAddress.Should().Be("https://app.datadoghq.com");
             }
@@ -140,5 +120,13 @@ namespace DataDogApi.Client.Tests
                 new HttpResponseMessage(
                     System.Net.HttpStatusCode.OK));
         }
+    }
+
+    internal class DefaultHealthReportOptions
+    {
+        internal static HealthReportOptions Instance =>
+            new HealthReportOptionsBuilder(applicationPrefix: "TESTAPP")
+                .WithOptionalDefaultMetricTag("Environment", "testing")
+                .Build();
     }
 }

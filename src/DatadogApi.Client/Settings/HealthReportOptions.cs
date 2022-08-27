@@ -2,7 +2,7 @@
 {
     public class HealthReportOptions
     {
-        public HealthReportOptions(string applicationPrefix) =>
+        internal HealthReportOptions(string applicationPrefix) =>
             ApplicationPrefix = applicationPrefix;
 
         /// <summary>
@@ -15,7 +15,7 @@
         ///   Any optional tags you always want this package to push to Datadog
         ///   with your health telemetry like current execution environment etc
         /// </summary>
-        public Dictionary<string, string> DefaultMetricTags { get; set; }
+        internal Dictionary<string, string> DefaultMetricTags { get; set; }
             = new Dictionary<string, string>();
     }
 }
