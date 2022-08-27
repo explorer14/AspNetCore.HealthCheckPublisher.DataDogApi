@@ -1,8 +1,8 @@
+using DatadogApi.Client.Builders;
 using DatadogApi.Client.Extensions;
 using DatadogApi.Client.Settings;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
-using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,14 +26,9 @@ builder.Services.AddHealthChecks()
     .AddCheck<ServiceLivenessCheck>("Liveness")
     .AddDatadogPublisher(
         builder.Configuration.GetDatadogApiSettings(),
-        new HealthReportOptions
-        {
-            ApplicationPrefix = "myapi",
-            DefaultMetricTags = new Dictionary<string, string>(new[]
-            {
-                new KeyValuePair<string, string>("environment", builder.Environment.EnvironmentName)
-            })
-        });
+        new HealthReportOptionsBuilder(applicationPrefix: "myapi")
+        .WithOptionalDefaultMetricTag("environment", builder.Environment.EnvironmentName)
+        .Build());
 
 var app = builder.Build();
 
