@@ -30,12 +30,7 @@ namespace DataDogApi.Client.Tests
                     expectedApplicationKey));
 
             await ddReporter.SendHealthReport(
-                new HealthReport(
-                    new Dictionary<string, HealthReportEntry>(
-                        new KeyValuePair<string, HealthReportEntry>[]
-                        {
-                            new("TEST",new HealthReportEntry())
-                        }), HealthStatus.Healthy, TimeSpan.Zero),
+                DefaultHealthReport.InstanceWithHealthyResult,
                 DefaultHealthReportOptions.Instance);
 
             apiRequestSpy.Headers.Should()
@@ -57,15 +52,10 @@ namespace DataDogApi.Client.Tests
                 {
                     BaseAddress = new Uri("https://foo.bar")
                 },
-                new DatadogApiSettings(
-                    "APIKEY",
-                    "APPKEY"));
+                DefaultDatadogApiSettings.Instance);
 
             await ddReporter.SendHealthReport(
-                new HealthReport(
-                    new Dictionary<string, HealthReportEntry>(),
-                    HealthStatus.Healthy,
-                    TimeSpan.Zero),
+                DefaultHealthReport.InstanceWithNoDependencies,
                 DefaultHealthReportOptions.Instance);
 
             apiRequestSpy.RequestBodyAsMetric.Should().BeEquivalentTo(metric);
@@ -77,19 +67,14 @@ namespace DataDogApi.Client.Tests
             var svcs = new ServiceCollection();
             var apiRequestSpy = new DatadogApiRequestSpy();
 
-            svcs.AddDatadogHealthReporter(new DatadogApiSettings("FAKE", "FAKE"))
+            svcs.AddDatadogHealthReporter(DefaultDatadogApiSettings.Instance)
                 .ConfigurePrimaryHttpMessageHandler(_ => apiRequestSpy);
 
             using (var scope = svcs.BuildServiceProvider().CreateScope())
             {
                 var reporter = scope.ServiceProvider.GetService<IApplicationHealthReporter>();
                 await reporter.SendHealthReport(
-                new HealthReport(
-                    new Dictionary<string, HealthReportEntry>(
-                        new KeyValuePair<string, HealthReportEntry>[]
-                        {
-                            new("TEST",new HealthReportEntry())
-                        }), HealthStatus.Healthy, TimeSpan.Zero),
+                DefaultHealthReport.InstanceWithHealthyResult,
                 DefaultHealthReportOptions.Instance);
 
                 apiRequestSpy.HostAddress.Should().Be("https://app.datadoghq.com");
@@ -128,5 +113,28 @@ namespace DataDogApi.Client.Tests
             new HealthReportOptionsBuilder(applicationPrefix: "TESTAPP")
                 .WithOptionalDefaultMetricTag("Environment", "testing")
                 .Build();
+    }
+
+    internal class DefaultDatadogApiSettings
+    {
+        internal static DatadogApiSettings Instance =>
+            new DatadogApiSettings("FAKE", "FAKE");
+    }
+
+    internal class DefaultHealthReport
+    {
+        internal static HealthReport InstanceWithHealthyResult => new HealthReport(
+            new Dictionary<string, HealthReportEntry>(
+                new KeyValuePair<string, HealthReportEntry>[]
+                {
+                    new("TEST",new HealthReportEntry())
+                }),
+            HealthStatus.Healthy,
+            TimeSpan.Zero);
+
+        internal static HealthReport InstanceWithNoDependencies => new HealthReport(
+                    new Dictionary<string, HealthReportEntry>(),
+                    HealthStatus.Healthy,
+                    TimeSpan.Zero);
     }
 }
