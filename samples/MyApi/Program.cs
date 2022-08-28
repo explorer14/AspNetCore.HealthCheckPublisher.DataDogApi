@@ -1,6 +1,5 @@
 using DatadogApi.Client.Builders;
 using DatadogApi.Client.Extensions;
-using DatadogApi.Client.Settings;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 
@@ -11,7 +10,6 @@ Log.Logger = new LoggerConfiguration()
     .Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}]{Properties:j}{Message:lj}{NewLine}{Exception}")
     .Enrich
     .FromLogContext()
-    .FilterOutEventsWithSensitiveInfo()
     .CreateLogger();
 
 // Add services to the container.
