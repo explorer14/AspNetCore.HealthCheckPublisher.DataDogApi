@@ -1,6 +1,12 @@
 # Intro
 
-Package to publish results of an ASP.NET Core health check to Datadog. Here's how to use it
+Package to publish results of an ASP.NET Core health check to Datadog using Datadog's REST API. You can use this package in one of the two ways:
+
+## In-process
+
+This is where your ASP.NET Core application publishes its own health check results using  ASP.NET Core's default publishing service based on `IHostedService`. The way it will work is at regular intervals (a customisable number), the built in `HealthCheckPublisherHostedService` will collect health check results from all the health checks registered in your application using another built in `HealthCheckService` and then call into all the registered `IHealthCheckPublisher` implementations to publish the results of the health check.
+
+The steps to register the Datadog API publisher are:
 
 ### Step 1: Add your custom health checks to IServiceCollection DI
 
@@ -9,7 +15,7 @@ services.AddHealthChecks()
         .AddCheck<MyAppHealthCheck>("MyAppHealthCheck");        
 ```
 
-### Step 2: Make sure you have the Datadog API key and application key and the following settings exist in your `secrets.json` and your CI environment (or you have some secure way of providing these into your application)
+### Step 2: Make sure you have the Datadog API key and application key and the following settings exist in your `secrets.json` (for local dev work) and your CI environment (you MUST have some secure way of providing these into your application)
 
 ```javascript
 {
@@ -20,7 +26,7 @@ services.AddHealthChecks()
 }
 ```
 
-### Step 3: Add this package (`DatadogApi.Client`) to the `IHealthChecksBuilder` chain
+### Step 3: Add this package (`AspNetCore.HealthCheckPublisher.DataDogApi`) to the `IHealthChecksBuilder` chain
 
 ```csharp
 services
@@ -28,26 +34,39 @@ services
         .AddCheck<MyAppHealthCheck>("MyAppHealthCheck")
         .AddDatadogPublisher(
             Configuration.GetDatadogApiSettings(),
-            new HealthReportOptions
-            {
-                ApplicationPrefix = "traxpense",
-                DefaultMetricTags = new Dictionary<string, string>(new[]
-                {
-                    new KeyValuePair<string, string>("Environment",
-                        Environment.EnvironmentName.ToLowerInvariant())
-                })
-            });
+            new HealthReportOptionsBuilder(applicationPrefix: "myapi")
+              .WithOptionalDefaultMetricTag("environment", Environment.EnvironmentName)
+              .Build());
 ```
 
-### Step 4: Modify your Serilog configuration to filter out events with sensitive data:
+## Out-of-process
+
+This is where the you ping the health endpoint on your ASP.NET Core application from an externally hosted service for e.g. a serverless function. This way if the application is unavailable the telemetry won't go down with it. Using this package out of process involves following steps:
+
+### Step 1: Register an instance of the health reporter by a call to `AddDatadogHealthReporter` extension method available on the `ServiceCollection` passing in an instance of `DatadogApiSettings` that you can hydrate from `IConfiguration`:
 
 ```csharp
-Log.Logger = new LoggerConfiguration()
-                ...                
-                .FilterOutEventsWithSensitiveInfo()
-                ...
+_services.AddDatadogHealthReporter(
+  new DatadogApiSettings(
+  configuration.GetValue<string>("DatadogApiSettingsApiKey"),
+  configuration.GetValue<string>("DatadogApiSettingsApplicationKey"));                
 ```
 
-The reason for this is that the package uses Serilog, if your application also uses Serilog, then you'd want to scrub the API key and application key that get logged by the HTTP pipeline that the publisher uses. Currently there is no way to customise the pipeline to scrub the sensitive data so you will have to add this line to your Serilog builder chain.
+### Step 2: Collect health check report from the target application using an `HttpClient`
 
-If your application doesn't use Serilog, then you don't need this setting.
+### Step 3: Resolve the instance of `IApplicationHealthReporter` from the `ServiceCollection` either in a scope or via constructor injection
+
+```csharp
+var reporter = scope.ServiceProvider.GetService<IApplicationHealthReporter>();                
+```
+
+### Step 4: Send the health report via this reporter instance:
+
+```csharp
+await reporter.SendHealthReport(
+  healthReport,
+  new HealthReportOptionsBuilder(applicationPrefix: "myapi")
+      .WithOptionalDefaultMetricTag(
+          "Environment", configuration.GetValue("ASPNETCORE_ENVIRONMENT", "development"))
+      .Build());
+```
