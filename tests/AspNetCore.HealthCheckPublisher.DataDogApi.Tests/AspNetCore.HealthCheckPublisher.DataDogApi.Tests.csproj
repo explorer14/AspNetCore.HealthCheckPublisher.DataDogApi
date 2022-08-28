@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DatadogApi.Client\DatadogApi.Client.csproj" />
+    <ProjectReference Include="..\..\src\AspNetCore.HealthCheckPublisher.DataDogApi\AspNetCore.HealthCheckPublisher.DataDogApi.csproj" />
   </ItemGroup>
 
 </Project>

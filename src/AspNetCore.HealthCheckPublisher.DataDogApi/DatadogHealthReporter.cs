@@ -1,11 +1,11 @@
-﻿using DatadogApi.Client.Metrics;
-using DatadogApi.Client.Settings;
+﻿using AspNetCore.HealthCheckPublisher.DataDogApi.Metrics;
+using AspNetCore.HealthCheckPublisher.DataDogApi.Settings;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 using Serilog;
 using System.Text;
 
-namespace DatadogApi.Client
+namespace AspNetCore.HealthCheckPublisher.DataDogApi
 {
     public class DatadogHealthReporter : IApplicationHealthReporter
     {

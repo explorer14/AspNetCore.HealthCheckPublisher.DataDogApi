@@ -1,9 +1,9 @@
-using DatadogApi.Client;
-using DatadogApi.Client.Extensions;
-using DatadogApi.Client.Settings;
+using AspNetCore.HealthCheckPublisher.DataDogApi;
+using AspNetCore.HealthCheckPublisher.DataDogApi.Extensions;
+using AspNetCore.HealthCheckPublisher.DataDogApi.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DataDogApi.Client.Tests
+namespace AspNetCore.HealthCheckPublisher.DataDogApi.Tests
 {
     public class WhenBootstrappingHealthReporter
     {

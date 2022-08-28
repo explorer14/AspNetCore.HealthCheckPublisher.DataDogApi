@@ -1,4 +1,4 @@
-﻿namespace DatadogApi.Client.Settings
+﻿namespace AspNetCore.HealthCheckPublisher.DataDogApi.Settings
 {
     public class HealthReportOptions
     {

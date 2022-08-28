@@ -1,8 +1,8 @@
-﻿using DatadogApi.Client.Settings;
+﻿using AspNetCore.HealthCheckPublisher.DataDogApi.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace DatadogApi.Client.Extensions
+namespace AspNetCore.HealthCheckPublisher.DataDogApi.Extensions
 {
     public static class HealthCheckBuilderExtensions
     {
