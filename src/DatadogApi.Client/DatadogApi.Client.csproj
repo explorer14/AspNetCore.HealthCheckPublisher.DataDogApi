@@ -9,7 +9,7 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<NoWarn>1591</NoWarn>
 		<Authors>Aman Agrawal</Authors>
-		<PackageTags>resilience,health checks,datadog,health check result publisher,rest api,asp.net core,.net</PackageTags>
+		<PackageTags>resilience, health checks, datadog, health check result publisher, rest api, asp.net core, .net</PackageTags>
 		<Description>A simple helper package to allow ASP.NET Core applications to publish health check results to Datadog using its REST API.</Description>
 	</PropertyGroup>
 
