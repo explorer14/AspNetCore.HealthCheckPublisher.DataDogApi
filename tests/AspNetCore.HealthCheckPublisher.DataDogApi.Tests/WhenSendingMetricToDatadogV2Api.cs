@@ -1,15 +1,15 @@
-﻿using DatadogApi.Client;
-using DatadogApi.Client.Builders;
-using DatadogApi.Client.Extensions;
-using DatadogApi.Client.Metrics;
-using DatadogApi.Client.Settings;
+﻿using AspNetCore.HealthCheckPublisher.DataDogApi;
+using AspNetCore.HealthCheckPublisher.DataDogApi.Builders;
+using AspNetCore.HealthCheckPublisher.DataDogApi.Extensions;
+using AspNetCore.HealthCheckPublisher.DataDogApi.Metrics;
+using AspNetCore.HealthCheckPublisher.DataDogApi.Settings;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
-namespace DataDogApi.Client.Tests
+namespace AspNetCore.HealthCheckPublisher.DataDogApi.Tests
 {
     public class WhenSendingMetricToDatadogV2Api
     {

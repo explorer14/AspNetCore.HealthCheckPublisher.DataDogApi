@@ -1,6 +1,6 @@
-﻿using DatadogApi.Client.Settings;
+﻿using AspNetCore.HealthCheckPublisher.DataDogApi.Settings;
 
-namespace DatadogApi.Client.Builders
+namespace AspNetCore.HealthCheckPublisher.DataDogApi.Builders
 {
     public class HealthReportOptionsBuilder
     {

@@ -1,5 +1,5 @@
-using DatadogApi.Client.Builders;
-using DatadogApi.Client.Extensions;
+using AspNetCore.HealthCheckPublisher.DataDogApi.Builders;
+using AspNetCore.HealthCheckPublisher.DataDogApi.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 

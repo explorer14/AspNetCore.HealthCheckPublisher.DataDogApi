@@ -1,4 +1,4 @@
-﻿namespace DatadogApi.Client.Metrics
+﻿namespace AspNetCore.HealthCheckPublisher.DataDogApi.Metrics
 {
     public class GuageMetric
     {

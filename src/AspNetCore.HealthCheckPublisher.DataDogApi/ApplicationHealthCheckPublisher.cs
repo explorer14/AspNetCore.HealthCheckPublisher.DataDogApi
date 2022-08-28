@@ -1,7 +1,7 @@
-﻿using DatadogApi.Client.Settings;
+﻿using AspNetCore.HealthCheckPublisher.DataDogApi.Settings;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace DatadogApi.Client
+namespace AspNetCore.HealthCheckPublisher.DataDogApi
 {
     public class ApplicationHealthCheckPublisher : IHealthCheckPublisher
     {

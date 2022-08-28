@@ -86,7 +86,7 @@ Task("PushToNuget")
 	.IsDependentOn("Pack")
 	.Does(()=>
 {
-    var files = GetFiles("./artifacts/DatadogApi.Client.*.nupkg");
+    var files = GetFiles("./artifacts/AspNetCore.HealthCheckPublisher.DataDogApi.*.nupkg");
 
     foreach(var file in files)
     {
@@ -113,7 +113,7 @@ Task("Pack")
 			NoRestore = true
 		};
 
-		DotNetCorePack("./src/DatadogApi.Client/DatadogApi.Client.csproj", 
+		DotNetCorePack("./src/AspNetCore.HealthCheckPublisher.DataDogApi/AspNetCore.HealthCheckPublisher.DataDogApi.csproj", 
             settings);
 });
 
