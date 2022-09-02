@@ -22,10 +22,13 @@ namespace AspNetCore.HealthCheckPublisher.DataDogApi
 
         public async Task SendHealthReport(
             HealthReport healthReport,
-            HealthReportOptions healthReportOptions)
+            HealthReportOptions? healthReportOptions)
         {
+            if (healthReport == null)
+                throw new ArgumentNullException(nameof(healthReport));
+
             var metricTags =
-                healthReportOptions.DefaultMetricTags
+                healthReportOptions?.DefaultMetricTags
                     .Select(x => $"{x.Key}:{x.Value}")
                     .ToList();
 
@@ -33,18 +36,18 @@ namespace AspNetCore.HealthCheckPublisher.DataDogApi
 
             await SendMetricForOverallAppHealth(
                 healthReport,
-                healthReportOptions.ApplicationPrefix,
+                healthReportOptions?.ApplicationPrefix,
                 metricTags, posixTimeStamp);
 
             foreach (var item in healthReport.Entries)
             {
                 await SendMetricForComponentHealth(
-                    healthReportOptions.ApplicationPrefix,
+                    healthReportOptions?.ApplicationPrefix,
                     metricTags, posixTimeStamp, item);
             }
         }
 
-        private async Task Post(string json)
+        private async Task Send(string json)
         {
             var ddApiKey = datadogApiSettings.ApiKey;
             var ddAppKey = datadogApiSettings.ApplicationKey;
@@ -66,27 +69,27 @@ namespace AspNetCore.HealthCheckPublisher.DataDogApi
             Log.Logger.Information($"DD returned {ddResponseContent}");
         }
 
+        private async Task SendCountMetric(CountMetric countMetric)
+        {
+            var json = JsonConvert.SerializeObject(
+                countMetric,
+                Formatting.Indented);
+
+            await Send(json);
+        }
+
         private async Task SendGuageMetric(GuageMetric guageMetric)
         {
             var json = JsonConvert.SerializeObject(
                 guageMetric,
                 Formatting.Indented);
 
-            await Post(json);
-        }
-
-        private async Task SendMetric(CountMetric countMetric)
-        {
-            var json = JsonConvert.SerializeObject(
-                countMetric,
-                Formatting.Indented);
-
-            await Post(json);
+            await Send(json);
         }
 
         private async Task SendMetricForComponentHealth(
-            string metricAppPrefix,
-            List<string> metricTags,
+                                    string? metricAppPrefix,
+            List<string>? metricTags,
             long posixTimeStamp,
             KeyValuePair<string, HealthReportEntry> item)
         {
@@ -95,41 +98,41 @@ namespace AspNetCore.HealthCheckPublisher.DataDogApi
                 item.Key,
                 item.Value.Status);
 
-            CountMetric countMetric = new CountMetric(
+            var countMetric = new CountMetric(
                 metricName: $"{metricAppPrefix}.app." +
                     $"{item.Key.ToLower().Replace(" ", "_")}.ishealthy",
                 posixTimeStamp: posixTimeStamp,
                 count: (int)item.Value.Status,
-                tags: metricTags.ToList());
+                tags: metricTags);
 
-            GuageMetric guageMetric = new GuageMetric(
+            var guageMetric = new GuageMetric(
                 metricName: $"{metricAppPrefix}.app." +
                     $"{item.Key.ToLower().Replace(" ", "_")}.duration",
                 posixTimeStamp: posixTimeStamp,
                 value: (int)item.Value.Duration.TotalMilliseconds,
                 tags: metricTags);
 
-            await SendMetric(countMetric);
+            await SendCountMetric(countMetric);
             await SendGuageMetric(guageMetric);
         }
 
         private async Task SendMetricForOverallAppHealth(
             HealthReport healthReport,
-            string metricAppPrefix,
-            List<string> metricTags,
+            string? metricAppPrefix,
+            List<string>? metricTags,
             long posixTimeStamp)
         {
             Log.Logger.Information(
                 "Overall health result: {result}",
                 healthReport.Status);
 
-            CountMetric countMetric1 = new CountMetric(
+            var countMetric = new CountMetric(
                     metricName: $"{metricAppPrefix}.app.ishealthy",
                     posixTimeStamp: posixTimeStamp,
                     count: (int)healthReport.Status,
-                    tags: metricTags.ToList());
+                    tags: metricTags);
 
-            await SendMetric(countMetric1);
+            await SendCountMetric(countMetric);
         }
     }
 }

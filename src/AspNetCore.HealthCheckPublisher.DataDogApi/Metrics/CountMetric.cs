@@ -5,7 +5,7 @@
         public CountMetric(
             string metricName,
             long posixTimeStamp,
-            int count, List<string> tags)
+            int count, List<string>? tags)
         {
             series.Add(
                 new Series(
@@ -13,7 +13,7 @@
                     count: count,
                     hostName: Environment.MachineName)
                 {
-                    tags = tags,
+                    tags = tags ?? Enumerable.Empty<string>().ToList(),
                     metric = metricName,
                     type = 1
                 });
