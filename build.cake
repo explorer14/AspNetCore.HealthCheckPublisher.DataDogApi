@@ -102,7 +102,7 @@ Task("PushToNuget")
         using(var process = StartAndReturnProcess("dotnet", 
             new ProcessSettings
             { 
-                Arguments = $"nuget push {file} --skip-duplicate -n true -s https://api.nuget.org/v3/index.json -k {nugetApiKey}" 
+                Arguments = $"nuget push {file} --skip-duplicate -n -s https://api.nuget.org/v3/index.json -k {nugetApiKey}" 
             }))
         {
             process.WaitForExit();
