@@ -98,7 +98,15 @@ Task("PushToNuget")
             SkipDuplicate = true
         };
 
+        var settingsNuget = new DotNetCoreNuGetPushSettings
+        {
+            Source = "https://api.nuget.org/v3/index.json",
+            ApiKey = EnvironmentVariable("NUGET_API_KEY"),
+            SkipDuplicate = true
+        };
+
         DotNetCoreNuGetPush(file.FullPath, settings);
+        DotNetCoreNuGetPush(file.FullPath, settingsNuget);
     }
 });
 

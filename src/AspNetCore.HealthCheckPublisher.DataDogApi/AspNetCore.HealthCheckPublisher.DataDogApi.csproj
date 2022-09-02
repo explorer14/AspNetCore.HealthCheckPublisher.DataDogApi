@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageVersion>1.1.0</PackageVersion>
-		<PackageProjectUrl>https://github.com/explorer14/DatadogApiClient/blob/master/README.md</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/explorer14/AspNetCore.HealthCheckPublisher.DataDogApi/blob/master/README.md</PackageProjectUrl>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<NoWarn>1591</NoWarn>
 		<Authors>Aman Agrawal</Authors>
