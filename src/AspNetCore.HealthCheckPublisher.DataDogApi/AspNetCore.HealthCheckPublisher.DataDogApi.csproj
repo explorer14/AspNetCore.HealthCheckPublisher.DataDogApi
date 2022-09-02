@@ -11,6 +11,7 @@
 		<Authors>Aman Agrawal</Authors>
 		<PackageTags>resilience; health checks; datadog; health check result publisher; rest api; asp.net core; .net</PackageTags>
 		<Description>A simple helper package to allow ASP.NET Core applications to publish health check results to Datadog using its REST API.</Description>
+		<PackageLicenseUrl>https://github.com/explorer14/AspNetCore.HealthCheckPublisher.DataDogApi/blob/master/LICENSE.md</PackageLicenseUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
