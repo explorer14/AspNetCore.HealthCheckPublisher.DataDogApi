@@ -87,6 +87,7 @@ Task("PushToNuget")
 	.Does(()=>
 {
     var files = GetFiles("./artifacts/AspNetCore.HealthCheckPublisher.DataDogApi.*.nupkg");
+    var nugetApiKey = EnvironmentVariable("NUGET_API_KEY");
 
     foreach(var file in files)
     {
@@ -98,15 +99,21 @@ Task("PushToNuget")
             SkipDuplicate = true
         };
 
-        var settingsNuget = new DotNetCoreNuGetPushSettings
+        using(var process = StartAndReturnProcess("dotnet", 
+            new ProcessSettings
+            { 
+                Arguments = $"nuget push {file} --skip-duplicate -n true -s https://api.nuget.org/v3/index.json -k {nugetApiKey}" 
+            }))
         {
-            Source = "https://api.nuget.org/v3/index.json",
-            ApiKey = EnvironmentVariable("NUGET_API_KEY"),
-            SkipDuplicate = true
-        };
+            process.WaitForExit();
+            // This should output 0 as valid arguments supplied
+            var exitCode = process.GetExitCode();
+
+            if (exitCode > 0)
+                throw new InvalidOperationException($"Failed to publish to Nuget with exit code {exitCode}.");
+        }
 
         DotNetCoreNuGetPush(file.FullPath, settings);
-        DotNetCoreNuGetPush(file.FullPath, settingsNuget);
     }
 });
 
