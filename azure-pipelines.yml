@@ -3,6 +3,9 @@ trigger:
 pr:
 - master
 
+variables:
+- group: 'Library Common Vars'
+
 pool:
   vmImage: 'ubuntu-latest'
 
