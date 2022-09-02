@@ -5,7 +5,7 @@
         public GuageMetric(
             string metricName,
             long posixTimeStamp,
-            int value, List<string> tags)
+            int value, List<string>? tags)
         {
             series.Add(
                 new Series(
@@ -13,7 +13,7 @@
                     count: value,
                     hostName: Environment.MachineName)
                 {
-                    tags = tags,
+                    tags = tags ?? Enumerable.Empty<string>().ToList(),
                     metric = metricName,
                     type = 3
                 });

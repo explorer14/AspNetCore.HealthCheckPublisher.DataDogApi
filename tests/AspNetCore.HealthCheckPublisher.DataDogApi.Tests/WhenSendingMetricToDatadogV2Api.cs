@@ -1,11 +1,9 @@
-﻿using AspNetCore.HealthCheckPublisher.DataDogApi;
-using AspNetCore.HealthCheckPublisher.DataDogApi.Builders;
-using AspNetCore.HealthCheckPublisher.DataDogApi.Extensions;
+﻿using AspNetCore.HealthCheckPublisher.DataDogApi.Extensions;
 using AspNetCore.HealthCheckPublisher.DataDogApi.Metrics;
 using AspNetCore.HealthCheckPublisher.DataDogApi.Settings;
+using AspNetCore.HealthCheckPublisher.DataDogApi.Tests.TestData;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
@@ -41,6 +39,21 @@ namespace AspNetCore.HealthCheckPublisher.DataDogApi.Tests
         }
 
         [Fact]
+        public async Task ShouldNotThrowIfHealthReportOptionsIsNull()
+        {
+            var healthReporter = new DatadogHealthReporter(
+                new HttpClient(new DummyHttpMessageHandler())
+                {
+                    BaseAddress = new Uri("http://foo.bar")
+                }, DefaultDatadogApiSettings.Instance);
+
+            await this.Invoking(_ =>
+                healthReporter.SendHealthReport(
+                    DefaultHealthReport.InstanceWithHealthyResult, null))
+                .Should().NotThrowAsync();
+        }
+
+        [Fact]
         public async Task ShouldSendCompliantRequestBody()
         {
             var metric = JsonConvert.DeserializeObject<CountMetric>(
@@ -73,7 +86,7 @@ namespace AspNetCore.HealthCheckPublisher.DataDogApi.Tests
             using (var scope = svcs.BuildServiceProvider().CreateScope())
             {
                 var reporter = scope.ServiceProvider.GetService<IApplicationHealthReporter>();
-                await reporter.SendHealthReport(
+                await reporter!.SendHealthReport(
                 DefaultHealthReport.InstanceWithHealthyResult,
                 DefaultHealthReportOptions.Instance);
 
@@ -84,10 +97,10 @@ namespace AspNetCore.HealthCheckPublisher.DataDogApi.Tests
 
     internal class DatadogApiRequestSpy : HttpMessageHandler
     {
-        internal HttpRequestHeaders Headers { get; private set; }
+        internal HttpRequestHeaders? Headers { get; private set; }
 
-        internal string HostAddress { get; private set; }
-        internal CountMetric RequestBodyAsMetric { get; private set; }
+        internal string? HostAddress { get; private set; }
+        internal CountMetric? RequestBodyAsMetric { get; private set; }
 
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request,
@@ -105,36 +118,5 @@ namespace AspNetCore.HealthCheckPublisher.DataDogApi.Tests
                 new HttpResponseMessage(
                     System.Net.HttpStatusCode.OK));
         }
-    }
-
-    internal class DefaultHealthReportOptions
-    {
-        internal static HealthReportOptions Instance =>
-            new HealthReportOptionsBuilder(applicationPrefix: "TESTAPP")
-                .WithOptionalDefaultMetricTag("Environment", "testing")
-                .Build();
-    }
-
-    internal class DefaultDatadogApiSettings
-    {
-        internal static DatadogApiSettings Instance =>
-            new DatadogApiSettings("FAKE", "FAKE");
-    }
-
-    internal class DefaultHealthReport
-    {
-        internal static HealthReport InstanceWithHealthyResult => new HealthReport(
-            new Dictionary<string, HealthReportEntry>(
-                new KeyValuePair<string, HealthReportEntry>[]
-                {
-                    new("TEST",new HealthReportEntry())
-                }),
-            HealthStatus.Healthy,
-            TimeSpan.Zero);
-
-        internal static HealthReport InstanceWithNoDependencies => new HealthReport(
-                    new Dictionary<string, HealthReportEntry>(),
-                    HealthStatus.Healthy,
-                    TimeSpan.Zero);
     }
 }
