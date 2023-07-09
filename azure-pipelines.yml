@@ -10,12 +10,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - task: UseDotNet@2
-    displayName: Ensure .NET 6 Installed
-    inputs:
-      packageType: 'sdk'
-      version: '6.x'  
-
   - task: PowerShell@2
     displayName: Verify PR
     condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
