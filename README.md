@@ -1,5 +1,5 @@
 # Intro
-[![](https://img.shields.io/badge/Nuget-v1.1.1-green?style=for-the-badge&logo=nuget)](https://www.nuget.org/packages/AspNetCore.HealthCheckPublisher.DataDogApi)
+[![](https://img.shields.io/badge/Nuget-v3.0.0-green?style=for-the-badge&logo=nuget)](https://www.nuget.org/packages/AspNetCore.HealthCheckPublisher.DataDogApi)
 
 [![Build Status](https://skynetcode.visualstudio.com/Libraries/_apis/build/status/explorer14.AspNetCore.HealthCheckPublisher.DataDogApi?branchName=master)](https://skynetcode.visualstudio.com/Libraries/_build/latest?definitionId=84&branchName=master)
 
