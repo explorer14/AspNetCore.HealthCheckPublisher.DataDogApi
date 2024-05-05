@@ -15,12 +15,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{DC85
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApi", "samples\MyApi\MyApi.csproj", "{FB7E8D80-0B26-43CB-ABF9-EAE05E41671D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{99AB79A0-B282-4E75-A283-C3D6E0613FEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99AB79A0-B282-4E75-A283-C3D6E0613FEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99AB79A0-B282-4E75-A283-C3D6E0613FEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83CDE86F-A540-437C-B68D-56843091F97B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83CDE86F-A540-437C-B68D-56843091F97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83CDE86F-A540-437C-B68D-56843091F97B}.Release|Any CPU.ActiveCfg = Release|Any CPU
